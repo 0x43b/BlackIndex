@@ -1,0 +1,39 @@
+const $=id=>document.getElementById(id);const term=$("terminal"),form=$("cmdForm"),input=$("cmd");
+const clues=["CITY: TBILISI","HANDLER: VANTAGE","METHOD: SIGNAL SPOOF","OPERATION: GLASS DAGGER","FALSE TARGET: MINISTER KOVAL","REAL TARGET: DR. ELIA MORO","CUTOUT: BLUE LANTERN","DEAD DROP: PLATFORM 6","SAT WINDOW: 03:17Z","BLACKSITE: SABLE YARD","LEDGER KEY: MERIDIAN","FINAL PHRASE: NOT THE TARGET"];
+let state=JSON.parse(localStorage.getItem("blackarray_state")||"{}");state.clues||=[];state.creds||=[];state.flags||={};save();
+function save(){localStorage.setItem("blackarray_state",JSON.stringify(state));$("clueCount").textContent=state.clues.length+"/12";$("credCount").textContent=state.creds.length+"/6";$("threat").textContent=state.clues.length>8?"HOT":state.clues.length>4?"WARM":"COLD"}
+function line(t,c="sys"){const d=document.createElement("div");d.className="tline "+c;d.textContent=t;term.appendChild(d);term.scrollTop=term.scrollHeight}
+function addClue(i){const c=clues[i];if(!state.clues.includes(c)){state.clues.push(c);save();return "CLUE ACQUIRED: "+c}return "CLUE ALREADY HELD: "+c}
+function addCred(c){if(!state.creds.includes(c)){state.creds.push(c);save();return "CREDENTIAL ACCEPTED: "+c}return "CREDENTIAL ALREADY ACCEPTED: "+c}
+const commands={help:`COMMANDS:
+help status scan intercept dossier map decode credentials submit reset
+
+Hidden intel words exist.
+Case solution requires:
+handler / operation / city / method / real target`,status:()=>`BLACK ARRAY STATUS
+CLUES: ${state.clues.length}/12
+CREDENTIALS: ${state.creds.length}/6
+THREAT: ${$("threat").textContent}
+
+The target is not the target.`,scan:()=>{if(state.clues.length<3)return addClue(state.clues.length);if(!state.creds.includes("BRIEFING"))return"SCAN RESISTS. Credential required: BRIEFING";return addClue(Math.min(state.clues.length,11))},intercept:()=>{const msgs=["VANTAGE moved the package through Platform 6.","Minister Koval is noise. Repeat: Koval is noise.","Blue Lantern paid in Meridian fragments.","Sable Yard went dark at 03:17Z.","Moro was never protected. Moro was bait."];return msgs[Math.floor(Math.random()*msgs.length)]+"\\n"+addClue(Math.min(state.clues.length,11))},dossier:()=>`OPEN FILES:
+/dossier
+Subjects: VANTAGE, KOVAL, MORO, BLUE LANTERN`,map:()=>`GLOBAL ARRAY:
+/map
+Hot zones: London, Tbilisi, Singapore, Reykjavik.
+Only one city goes dark before the name appears.`,decode:()=>{if(state.clues.length<4)return"DECODE FAILED. More intercepts required.";return addCred("VANTAGE")+"\\n"+addClue(3)},credentials:()=>state.creds.length?state.creds.join("\\n"):"NO CREDENTIALS","blue lantern":()=>addCred("BLUE LANTERN")+"\\nDead drop implied: /deaddrop",meridian:()=>addCred("MERIDIAN")+"\\nLedger implied: /ledger","sable yard":()=>addCred("SABLE YARD")+"\\nBlacksite implied: /blacksite",briefing:()=>addCred("BRIEFING"),"elia moro":()=>addCred("ELIA MORO"),satellite:()=>"/satellite",submit:()=>`Use:
+submit handler operation city method target
+
+Example:
+submit vantage glass dagger tbilisi signal spoof elia moro`,reset:()=>{localStorage.removeItem("blackarray_state");location.reload();return"RESETTING"}};
+function solve(parts){const s=parts.join(" ").toLowerCase();const ok=["vantage","glass dagger","tbilisi","signal spoof","elia moro"].every(x=>s.includes(x));if(!ok)return"SUBMISSION REJECTED. One of the five truths is wrong.";if(state.clues.length<10)return"SUBMISSION HELD. Insufficient corroboration. Need 10 clues.";state.flags.complete=true;save();return`SUBMISSION ACCEPTED.
+
+HANDLER: VANTAGE
+OPERATION: GLASS DAGGER
+CITY: TBILISI
+METHOD: SIGNAL SPOOF
+REAL TARGET: DR. ELIA MORO
+
+FINAL FILE UNSEALED:
+/final`;}
+function exec(raw){const cmd=raw.trim().toLowerCase();if(!cmd)return;line("> "+raw,"user");let out;if(cmd.startsWith("submit "))out=solve(cmd.slice(7).split(/\\s+/));else out=commands[cmd];if(typeof out==="function")out=out();if(!out)out="UNKNOWN COMMAND. The array still logged it.";line(out,out.includes("REJECTED")||out.includes("FAILED")?"warn":"sys");save()}
+form.addEventListener("submit",e=>{e.preventDefault();exec(input.value);input.value=""});line("BLACK ARRAY // OPS TERMINAL","corrupt");line("Type help.");setInterval(()=>document.getElementById("clock").textContent=new Date().toLocaleTimeString(),1000);
