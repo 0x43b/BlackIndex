@@ -1,27 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>BLACK INDEX</title>
-  <style>
-    body{margin:0;background:#02060a;color:#c9f7ff;font-family:Consolas,monospace;display:grid;place-items:center;min-height:100vh}
-    .box{width:min(850px,92vw);border:1px solid #00e5ff;padding:28px;background:rgba(0,0,0,.75);box-shadow:0 0 35px rgba(0,229,255,.2)}
-    h1{color:#00e5ff;letter-spacing:5px}
-    a{display:block;color:#ffb000;text-decoration:none;border:1px solid #333;padding:12px;margin:10px 0}
-    a:hover{background:#111}
-    .locked{color:#666}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#02060a">
+<title>BLACK INDEX // INCIDENT CATALOG</title>
+<link rel="stylesheet" href="/assets/blackindex.css?v=1">
 </head>
 <body>
-  <div class="box">
-    <h1>BLACK INDEX</h1>
-    <p>INCIDENT CATALOG // COMPARTMENTALIZED</p>
+<canvas id="indexRain"></canvas>
+<div class="scan"></div>
+<div class="noise"></div>
 
-    <a href="https://orion0x43b.net">BI-0001 // ORION // EXTERNAL NODE</a>
-    <a href="/GLASS-DAGGER/">BI-0002 // GLASS DAGGER // ACTIVE</a>
-    <a class="locked">BI-0003 // SABLE YARD // SEALED</a>
-    <a class="locked">BI-0004 // NULL AUTHORITY // LOCKED</a>
+<header class="topbar">
+  <div>
+    <div class="brand">BLACK INDEX</div>
+    <div class="sub">UNACKNOWLEDGED INCIDENT CATALOG // PUBLIC MIRROR</div>
   </div>
+  <div class="hud-right">
+    <div id="clock">SYNCING</div>
+    <div>COMPARTMENT: OPEN-SOURCE</div>
+  </div>
+</header>
+
+<main class="archive-shell">
+  <section class="hero">
+    <div class="seal">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="core">BI</div>
+    </div>
+
+    <div>
+      <h1>INCIDENT INDEX</h1>
+      <p class="brief">
+        A recovered archive of disconnected operations, corrupted systems, dead drops,
+        abandoned facilities, and authority structures that deny their own existence.
+      </p>
+
+      <div class="status-grid">
+        <div><span>ARCHIVE</span><b>ONLINE</b></div>
+        <div><span>FILES</span><b>04</b></div>
+        <div><span>ACTIVE</span><b>01</b></div>
+        <div><span>EXTERNAL</span><b>01</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-panel">
+    <div class="map-grid"></div>
+    <div class="sweep"></div>
+    <div class="node n1">ORION</div>
+    <div class="node n2">GLASS DAGGER</div>
+    <div class="node n3 locked">SABLE YARD</div>
+    <div class="node n4 locked">NULL AUTHORITY</div>
+    <svg class="lines" viewBox="0 0 1000 430" preserveAspectRatio="none">
+      <path d="M200 160 C420 60 500 350 730 210" />
+      <path d="M730 210 C820 90 860 130 880 110" />
+      <path d="M730 210 C660 320 560 330 480 340" />
+    </svg>
+  </section>
+
+  <section class="catalog">
+    <a class="incident recovered" href="https://orion0x43b.net" target="_blank" rel="noopener noreferrer">
+      <div class="file-id">BI-0001</div>
+      <div>
+        <h2>ORION</h2>
+        <p>Reality was the damaged system.</p>
+        <span>STATUS: EXTERNAL NODE // RECOVERED</span>
+      </div>
+      <b>OPEN</b>
+    </a>
+
+    <a class="incident active" href="/GLASS-DAGGER/">
+      <div class="file-id">BI-0002</div>
+      <div>
+        <h2>GLASS DAGGER</h2>
+        <p>The target was never the target.</p>
+        <span>STATUS: ACTIVE // COMPARTMENT 7</span>
+      </div>
+      <b>ENTER</b>
+    </a>
+
+    <a class="incident sealed" href="https://sableyard.xyz" target="_blank" rel="noopener noreferrer">
+      <div class="file-id">BI-0003</div>
+      <div>
+        <h2>SABLE YARD</h2>
+        <p>The facility was abandoned. The logs never stopped.</p>
+        <span>STATUS: SEALED // DOMAIN RESERVED</span>
+      </div>
+      <b>SEALED</b>
+    </a>
+
+    <a class="incident locked" href="https://nullauthority.xyz" target="_blank" rel="noopener noreferrer">
+      <div class="file-id">BI-0004</div>
+      <div>
+        <h2>NULL AUTHORITY</h2>
+        <p>Nobody was in charge. The orders continued anyway.</p>
+        <span>STATUS: LOCKED // CHAIN OF COMMAND NULL</span>
+      </div>
+      <b>LOCKED</b>
+    </a>
+  </section>
+
+  <section class="terminal-tease">
+    <div class="terminal-head">
+      <span>ARCHIVE OUTPUT</span>
+      <span id="pulse">SIGNAL CLEAN</span>
+    </div>
+    <pre id="archiveLog"></pre>
+  </section>
+
+  <footer>
+    <span>BLACK INDEX IS NOT A SOURCE. BLACK INDEX IS A CORRELATION EVENT.</span>
+  </footer>
+</main>
+
+<!-- SOURCE NOTE:
+     BI-0001 is not hosted here.
+     It was recovered outside the index.
+     External node: orion0x43b.net
+-->
+
+<script src="/assets/blackindex.js?v=1"></script>
 </body>
 </html>
